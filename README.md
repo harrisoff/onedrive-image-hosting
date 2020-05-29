@@ -1,5 +1,7 @@
 # 使用OneDrive API制作图床
 
+[在线 demo](https://harrisoff.github.io/onedrive.html)
+
 ## 0. ~~前戏~~
 
 ### 目标
@@ -128,11 +130,13 @@ reader.onloadend = function (e) {
 }
 ```
 
-## 4. TODO: 大文件上传 待补全
+## 4. 大文件上传
 
 指4Mb以上，60Mb以下的文件。
 
 先调用`createUploadSession`接口，获取真正的上传URL，再使用返回的URL上传文件。
+
+不再展开讲。代码中已经实现，见 `/js/onedrive.js`。
 
 ## 5. 获取ShareId
 
