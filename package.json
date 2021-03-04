@@ -1,0 +1,32 @@
+{
+  "name": "onedrive",
+  "version": "1.0.0",
+  "description": "image hosting based on onedrive api",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production npx webpack",
+    "dev": "cross-env NODE_ENV=development npx webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrisoff/onedrive.git"
+  },
+  "author": "harrisoff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harrisoff/onedrive/issues"
+  },
+  "homepage": "https://github.com/harrisoff/onedrive#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "html-webpack-plugin": "^5.2.0",
+    "webpack": "^5.24.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {}
+}
