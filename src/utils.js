@@ -37,3 +37,14 @@ export function createElement(props) {
   }
   return el;
 }
+
+export function getHashQuery() {
+  const hash = window.location.href.split('#')[1];
+  if (!hash) return {};
+  const obj = new URLSearchParams(`?${hash}`);
+  return new Proxy(obj, {
+    get(source, props) {
+      return source.get(props);
+    },
+  });
+}

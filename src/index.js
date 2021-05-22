@@ -1,4 +1,4 @@
-import { readAsDataURL, createElement } from './utils';
+import { readAsDataURL, createElement, getHashQuery } from './utils';
 import { defaultDir, loginUrl } from './config';
 import {
   uploadSmall, getUploadUrl, uploadLarge, getShareId, genShareUrl,
@@ -6,10 +6,30 @@ import {
 import i18n from './i18n';
 
 function main() {
-  const hash = window.location.href.split('#')[1];
-  if (!hash) window.location.href = loginUrl;
-  else {
-    const token = hash.match(/(access_token=)([a-zA-Z0-9/%]*)/)[2];
+  const query = getHashQuery();
+  const { error } = query;
+  const token = query.access_token;
+  const errorDescription = query.error_description;
+
+  if (error && errorDescription) {
+    const dom = {
+      tag: 'div',
+      children: [
+        {
+          tag: 'p',
+          innerText: error,
+        },
+        {
+          tag: 'p',
+          innerText: errorDescription,
+        },
+      ],
+    };
+    const tree = createElement(dom);
+    document.querySelector('#root').appendChild(tree);
+  } else if (!token) {
+    window.location.href = loginUrl;
+  } else {
     const lang = i18n[navigator.language] || i18n.en;
     const {
       filename, dir, upload, getUrl, imageId, url,
