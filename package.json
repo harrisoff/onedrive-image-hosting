@@ -1,32 +1,45 @@
 {
-  "name": "onedrive",
-  "version": "1.0.0",
-  "description": "image hosting based on onedrive api",
-  "main": "src/index.js",
-  "scripts": {
-    "build": "cross-env NODE_ENV=production npx webpack",
-    "dev": "cross-env NODE_ENV=development npx webpack serve"
-  },
+  "name": "free-onedrive-image-hosting",
+  "version": "2.0.0",
+  "description": "Free image hosting service based on OneDrive",
+  "keywords": [
+    "microsoft",
+    "onedrive",
+    "api",
+    "image hosting",
+    "free"
+  ],
+  "author": "harrisoff",
+  "homepage": "https://github.com/harrisoff/free-onedrive-image-hosting",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harrisoff/onedrive.git"
+    "url": "git+https://github.com/harrisoff/free-onedrive-image-hosting.git"
   },
-  "author": "harrisoff",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/harrisoff/onedrive/issues"
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "vite",
+    "build": "tsc&&vite build",
+    "serve": "vite preview --port 8080"
   },
-  "homepage": "https://github.com/harrisoff/onedrive#readme",
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@harrisoff/onedrive-api": "^1.0.2",
+    "@material-ui/core": "^5.0.0-beta.5",
+    "@mui/icons-material": "^5.0.5",
+    "@mui/material": "^5.0.6",
+    "copy-to-clipboard": "^3.3.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  },
   "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^7.21.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "html-webpack-plugin": "^5.2.0",
-    "webpack": "^5.24.2",
-    "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
-  },
-  "dependencies": {}
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@vitejs/plugin-react": "^1.0.0",
+    "less": "^4.1.2",
+    "rollup-plugin-external-globals": "^0.6.1",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.4"
+  }
 }
