@@ -2,7 +2,7 @@
 
 上传图片到自己的 OneDrive 网盘，并生成可以用于 `<img>` 标签的链接。
 
-[点击使用](https://harrisoff.github.io/onedrive.html)。或者你也可以 fork 本项目**建立自己的图床服务**。
+在 github pages 上部署了一份，[点击试用](https://harrisoff.github.io/onedrive.html)。你也可以 fork 本项目**建立自己的图床服务**。
 
 ## 开发
 
