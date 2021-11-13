@@ -18,6 +18,7 @@ export default ({ mode }) => {
     ],
   }
   const productionConfig: UserConfigExport = {
+    base: '/onedrive-image-hosting',
     build: {
       rollupOptions: {
         plugins: [
