@@ -2,7 +2,7 @@
 
 This project allows you to upload images to your own OneDrive spaces and generate sharing links, which can be used as the `src` attribute of `<img>` tag.
 
-[Have a try here](https://harrisoff.github.io/onedrive.html). You can fork and **Build Your Own Image Hosting Service** as well.
+[Have a try here](https://harrisoff.github.io/onedrive-image-hosting). You can fork and **Build Your Own Image Hosting Service** as well.
 
 [中文文档](./README.zh-cn.md)
 
