@@ -1,8 +1,8 @@
 # Free OneDrive Image Hosting
 
-This project allows you to upload images to your own OneDrive spaces and generate sharing links, which can be used as the `src` attribute of `<img>` tags.
+This project allows you to upload images to your own OneDrive spaces and generate sharing links, which can be used as the `src` attribute of `<img>` tag.
 
-It is deployed in my github pages, [click this link and have a try](https://harrisoff.github.io/onedrive.html). You can fork and **Build Your Own Image Hosting Service** as well.
+[Have a try here](https://harrisoff.github.io/onedrive.html). You can fork and **Build Your Own Image Hosting Service** as well.
 
 [中文文档](./README.zh-cn.md)
 
@@ -10,9 +10,10 @@ It is deployed in my github pages, [click this link and have a try](https://harr
 
 This is basically a webGUI of [@harrisoff/onedrive-api](https://github.com/harrisoff/onedrive-api).
 
-Before starting local server, create `env.development` file in the root directory and fill it like `env.production`, but replace values with yours.
+Before starting a local server, create `env.development` file in the root directory and fill it like `env.production`, but replace values with yours.
 
 ## TODO List
 
 - [ ] local cache
 - [ ] i18n
+- [ ] eslint
