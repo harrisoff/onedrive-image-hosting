@@ -1,10 +1,10 @@
 import React from 'react';
 import { ImageList } from '@mui/material'
 
-import ImageItem from './ImageItem'
+import ImageItem, { Props as ImageItemProps } from './ImageItem'
 
 type Props = {
-  itemList: UploadItem[]
+  itemList: Omit<ImageItemProps, 'onClickUpload'>[]
   onClickUpload(fileName: string): void
 }
 export default ({ itemList, onClickUpload }: Props) => {

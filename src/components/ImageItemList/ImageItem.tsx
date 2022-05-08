@@ -3,18 +3,21 @@ import { ImageListItem, ImageListItemBar, IconButton, Tooltip } from '@mui/mater
 import { CloudUpload, CopyAllOutlined } from '@mui/icons-material'
 import copy from 'copy-to-clipboard'
 
-type Props = UploadItem & {
+export type Props = Pick<
+  UploadItem | CacheItem,
+	'fileName' | 'status' | 'shareUrl' | 'errorMessage'
+> & {
 	onClickUpload(fileName: string): void
 }
 export default (props: Props) => {
-	const { fileName, isUploading, shareUrl, error, onClickUpload } = props
+	const { fileName, status, shareUrl, errorMessage, onClickUpload } = props
 
 	let children: React.ReactNode
 	let actionIcon: React.ReactNode
 
-	if (error) {
+	if (errorMessage) {
 		children = <div className='imageListItemContent'>
-			<p className='errorMessage'>{error}</p>
+			<p className='errorMessage'>{errorMessage}</p>
 		</div>
 		actionIcon = <Tooltip title='upload again'>
 			<IconButton
@@ -26,7 +29,7 @@ export default (props: Props) => {
 		</Tooltip>
 	}
 
-	else if (isUploading) {
+	else if (status === 'uploading') {
 		children = <div className='imageListItemContent' />
 		actionIcon = <IconButton
 			sx={{ color: 'white' }}
@@ -38,7 +41,6 @@ export default (props: Props) => {
 	else {
 		children = <img
 			src={shareUrl}
-			alt={fileName}
 		/>
 		actionIcon = <Tooltip title='copy url'>
 			<IconButton

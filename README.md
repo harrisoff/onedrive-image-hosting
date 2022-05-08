@@ -16,6 +16,7 @@ Before starting a local server, create `env.development` file in the root direct
 
 ## TODO List
 
-- [ ] local cache
+- [ ] use popup window to authorize
+- [ ] local cache displayed as tree
 - [ ] i18n
 - [ ] eslint

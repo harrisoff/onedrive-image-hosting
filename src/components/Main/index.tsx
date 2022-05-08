@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	TextField, Button, Paper, styled,
 	Stack, Dialog, DialogContent,
@@ -17,7 +17,7 @@ const Input = styled('input')({
 	display: 'none',
 });
 
-const { records } = readCache()
+const records = readCache()
 
 export default ({ accessToken }: { accessToken: string }) => {
 	const [oneDriveApi] = useState(new OneDriveApi({ accessToken }))
@@ -26,10 +26,15 @@ export default ({ accessToken }: { accessToken: string }) => {
 
 	const [folderName, setFolderName] = useState(latestRecord?.folderName || defaultFolder);
 
-	const [uploadItemList, setUploadItemList] = useState<UploadItem[]>(records);
+	const [itemList, setItemList] = useState<(UploadItem | CacheItem)[]>(
+		records.map(r => ({
+			...r,
+			status: 'cache'
+		}))
+	);
 	const updateItemProgress = (item: UploadItem, data: Partial<UploadItem>) => {
-		setUploadItemList(prevProgress => prevProgress.map(p => {
-			if (p.fileName === item.fileName) {
+		setItemList(prevProgress => prevProgress.map(p => {
+			if (p.status !== 'cache' && p.fileName === item.fileName) {
 				return {
 					...p,
 					...data
@@ -37,32 +42,32 @@ export default ({ accessToken }: { accessToken: string }) => {
 			}
 			return p
 		}))
+		if (data.status === 'shared') {
+			writeCache(
+				itemList
+					.filter(i => i.status === 'cache' || i.status === 'shared')
+					.map((i) => ({
+						fileName: i.fileName,
+						folderName: i.folderName,
+						shareUrl: i.shareUrl
+					}))
+			)
+		}
 	}
-
-	useEffect(() => {
-		const updateCache = () => {
-			writeCache({ records: uploadItemList })
-		}
-		window.addEventListener('beforeunload', updateCache)
-		return () => {
-			window.removeEventListener('beforeunload', updateCache)
-		}
-	}, [uploadItemList])
 
 	const upload = (item: UploadItem) => {
 		updateItemProgress(
 			item,
 			{
-				isUploading: true,
-				error: ''
+				status: 'uploading'
 			}
 		)
-		oneDriveApi.upload(item.data, item.filePath)
+		oneDriveApi.upload(item.data, `${item.folderName}/${item.fileName}`)
 			.then(({ id }) => {
 				updateItemProgress(
 					item,
 					{
-						isUploaded: true,
+						status: 'uploaded',
 						uploadId: id,
 					}
 				)
@@ -72,7 +77,7 @@ export default ({ accessToken }: { accessToken: string }) => {
 							updateItemProgress(
 								item,
 								{
-									isUploading: false,
+									status: 'shared',
 									shareId,
 									shareUrl: getShareUrl(shareId)
 								}
@@ -85,8 +90,8 @@ export default ({ accessToken }: { accessToken: string }) => {
 				updateItemProgress(
 					item,
 					{
-						isUploading: false,
-						error: e.message
+						status: 'error',
+						errorMessage: e.message
 					}
 				)
 			})
@@ -94,40 +99,30 @@ export default ({ accessToken }: { accessToken: string }) => {
 
 	const handleChangeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const fileList = Array.from(e.target.files || [])
-		const newItemList = fileList.map(file => {
-			return {
-				fileName: file.name,
-				data: file,
-				filePath: `${folderName}/${file.name}`,
-				folderName,
-				isUploading: false,
-				isUploaded: false,
-				uploadId: '',
-				shareId: '',
-				shareUrl: '',
-				error: ''
-			}
-		})
-			.filter(item => {
-				return !item.isUploading && !item.isUploaded
-			})
-			.filter(item => {
-				return !uploadItemList.map(i => i.fileName).includes(item.fileName)
-			})
-		setUploadItemList([
-			...uploadItemList,
-			...newItemList.map(item => {
+		const newItemList: UploadItem[] = fileList
+			.map(file => {
 				return {
-					...item,
-					isUploading: true
+					fileName: file.name,
+					data: file,
+					folderName,
+					uploadId: '',
+					shareId: '',
+					shareUrl: '',
+					status: 'pending' as 'pending',
 				}
 			})
+			.filter(item => {
+				return !itemList.map(i => i.fileName).includes(item.fileName)
+			})
+		setItemList(prevItemList => [
+			...prevItemList,
+			...newItemList
 		])
 		newItemList.forEach(upload)
 	}
 
 	const handleReUpload = (fileName: string) => {
-		const file = uploadItemList.find(f => f.fileName === fileName)
+		const file = itemList.find((i): i is UploadItem => i.fileName === fileName)
 		if (file) upload(file)
 	}
 
@@ -171,8 +166,8 @@ export default ({ accessToken }: { accessToken: string }) => {
 
 		<Paper elevation={2} className='imageListWrapper'>
 			{
-				uploadItemList.length > 0 ? (
-					<ImageItemList itemList={uploadItemList} onClickUpload={handleReUpload} />
+				itemList.length > 0 ? (
+					<ImageItemList itemList={itemList} onClickUpload={handleReUpload} />
 				) : (
 					'Selected files will be displayed here'
 				)
