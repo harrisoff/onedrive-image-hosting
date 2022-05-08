@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	TextField, Button, Paper, styled,
 	Stack, Dialog, DialogContent,
@@ -8,7 +8,8 @@ import {
 import { GitHub } from '@mui/icons-material';
 import OneDriveApi, { getShareUrl, generateAuthUrl } from '@harrisoff/onedrive-js-sdk'
 
-import { clientId, redirectUri } from '../../config'
+import { clientId, redirectUri, defaultFolder } from '../../config'
+import { readCache, writeCache } from '../../cache';
 
 import ImageItemList from '../ImageItemList'
 
@@ -16,12 +17,16 @@ const Input = styled('input')({
 	display: 'none',
 });
 
+const { records } = readCache()
+
 export default ({ accessToken }: { accessToken: string }) => {
 	const [oneDriveApi] = useState(new OneDriveApi({ accessToken }))
 
-	const [folderName, setFolderName] = useState('OneDriveImageHosting');
+	const latestRecord = records[records.length - 1]
 
-	const [uploadItemList, setUploadItemList] = useState<UploadItem[]>([]);
+	const [folderName, setFolderName] = useState(latestRecord?.folderName || defaultFolder);
+
+	const [uploadItemList, setUploadItemList] = useState<UploadItem[]>(records);
 	const updateItemProgress = (item: UploadItem, data: Partial<UploadItem>) => {
 		setUploadItemList(prevProgress => prevProgress.map(p => {
 			if (p.fileName === item.fileName) {
@@ -33,6 +38,16 @@ export default ({ accessToken }: { accessToken: string }) => {
 			return p
 		}))
 	}
+
+	useEffect(() => {
+		const updateCache = () => {
+			writeCache({ records: uploadItemList })
+		}
+		window.addEventListener('beforeunload', updateCache)
+		return () => {
+			window.removeEventListener('beforeunload', updateCache)
+		}
+	}, [uploadItemList])
 
 	const upload = (item: UploadItem) => {
 		updateItemProgress(
@@ -84,6 +99,7 @@ export default ({ accessToken }: { accessToken: string }) => {
 				fileName: file.name,
 				data: file,
 				filePath: `${folderName}/${file.name}`,
+				folderName,
 				isUploading: false,
 				isUploaded: false,
 				uploadId: '',

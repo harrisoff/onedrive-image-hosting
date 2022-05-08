@@ -1,6 +1,7 @@
 type UploadItem = {
 	fileName: string
 	data: File
+	folderName: string
 	filePath: string
 	isUploading: boolean
 	isUploaded: boolean
