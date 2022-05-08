@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	TextField, Button, Paper, styled,
 	Stack, Dialog, DialogContent,
@@ -42,18 +42,19 @@ export default ({ accessToken }: { accessToken: string }) => {
 			}
 			return p
 		}))
-		if (data.status === 'shared') {
-			writeCache(
-				itemList
-					.filter(i => i.status === 'cache' || i.status === 'shared')
-					.map((i) => ({
-						fileName: i.fileName,
-						folderName: i.folderName,
-						shareUrl: i.shareUrl
-					}))
-			)
-		}
 	}
+	useEffect(() => {
+		// hmmm, there are unnecessary writes
+		writeCache(
+			itemList
+				.filter(i => i.status === 'cache' || i.status === 'shared')
+				.map((i) => ({
+					fileName: i.fileName,
+					folderName: i.folderName,
+					shareUrl: i.shareUrl
+				}))
+		)
+	}, [itemList])
 
 	const upload = (item: UploadItem) => {
 		updateItemProgress(
