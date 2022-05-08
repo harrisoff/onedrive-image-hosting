@@ -1,5 +1,5 @@
 import React from 'react';
-import { generateAuthUrl } from '@harrisoff/onedrive-api'
+import { generateAuthUrl } from '@harrisoff/onedrive-js-sdk'
 
 import { clientId, redirectUri } from './config';
 import { parseHash } from './utils'

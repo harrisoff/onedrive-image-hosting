@@ -6,7 +6,7 @@ import {
 	Divider, Link
 } from '@mui/material';
 import { GitHub } from '@mui/icons-material';
-import OneDriveApi, { getShareUrl, generateAuthUrl } from '@harrisoff/onedrive-api'
+import OneDriveApi, { getShareUrl, generateAuthUrl } from '@harrisoff/onedrive-js-sdk'
 
 import { clientId, redirectUri } from '../../config'
 

@@ -6,6 +6,6 @@
 
 ## 开发
 
-本项目基本上就是 [@harrisoff/onedrive-api](https://github.com/harrisoff/onedrive-api) 的一个 webGUI。
+本项目基本上就是 [@harrisoff/onedrive-js-sdk](https://github.com/harrisoff/onedrive-js-sdk) 的一个 webGUI。
 
 启动本地服务器之前，先在根目录创建 `env.development` 文件，参考 `env.production` 文件填写，不过要把值替换为你自己的。
