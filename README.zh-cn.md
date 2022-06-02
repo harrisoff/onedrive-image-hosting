@@ -1,11 +1,20 @@
 # OneDrive 免费图床
 
-上传图片到自己的 OneDrive 网盘，并生成可以用于 `<img>` 标签的链接。
+上传图片到自己的 OneDrive 网盘并生成链接，[点击试用](https://harrisoff.github.io/onedrive-image-hosting)。
 
-在 github pages 上部署了一份，[点击试用](https://harrisoff.github.io/onedrive-image-hosting)。你也可以 fork 本项目**建立自己的图床服务**。
+**纯前端页面，没有任何后端逻辑**。可以 fork 本项目建立自己的图床网站。
 
-## 开发
+## 文档
 
-本项目基本上就是 [@harrisoff/onedrive-js-sdk](https://github.com/harrisoff/onedrive-js-sdk) 的一个 webGUI。
+本项目基本上就是 [@harrisoff/onedrive-js-sdk](https://github.com/harrisoff/onedrive-js-sdk) 的一个 webGUI。所以只要看一下它的文档，然后替换 env 文件里的值。
 
-启动本地服务器之前，先在根目录创建 `env.development` 文件，参考 `env.production` 文件填写，不过要把值替换为你自己的。
+`access_token` 两小时过期，因为没有服务端逻辑帮助刷新，所以过期后需要手动再次授权。这表示本项目很难作为一个图片上传模块整合到比如 PicGo 等软件里。
+
+## 安全性提示
+
+Demo 页面使用了 Google Analytics 和百度统计收集使用数据。它们会收集页面的 url，不过：
+
+- Google Analytics 不会收集 url hash
+- Baidu Tongji 只收集 1024 字节的 url，access_token 超出了这个长度
+
+所以不需要担心 access_token 泄露。
