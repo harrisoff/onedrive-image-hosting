@@ -1,13 +1,13 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, UserConfigExport, loadEnv } from 'vite'
 import externalGlobals from "rollup-plugin-external-globals";
 import react from '@vitejs/plugin-react'
 import { createHtmlPlugin } from 'vite-plugin-html'
 
 const genScripts = ({ VITE_GA_TRACKING_ID, VITE_BAIDU_TRACKING_ID }: Record<string, string>) => {
   let scripts = `
-  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/react/18.0.0-alpha-6f3fcbd6f-20210730/umd/react.production.min.js"></script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/18.0.0-alpha-6f3fcbd6f-20210730/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js" integrity="sha256-43O3ClFnSFxzomVCG8/NH93brknJxRYF5tKRij3krg0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js" integrity="sha256-S0lp+k7zWUMk2ixteM6HZvu8L9Eh//OVrt+ZfbCpmgY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js" integrity="sha256-IXWO0ITNDjfnNXIu5POVfqlgYoop36bDzhodR6LW5Pc=" crossorigin="anonymous"></script>
   `
   if (VITE_BAIDU_TRACKING_ID) {
     scripts += `
@@ -26,16 +26,21 @@ const genScripts = ({ VITE_GA_TRACKING_ID, VITE_BAIDU_TRACKING_ID }: Record<stri
 // https://vitejs.dev/config/
 // https://github.com/vitejs/vite/issues/1930#issuecomment-783747858
 export default ({ mode }) => {
+  const {
+    VITE_BASE_URL,
+    VITE_GA_TRACKING_ID,
+    VITE_BAIDU_TRACKING_ID
+  } = loadEnv(mode, process.cwd())
   return defineConfig(
     mode === 'production' ?
       {
-        base: '/onedrive-image-hosting',
+        base: VITE_BASE_URL,
         build: {
           rollupOptions: {
+            external: ['react', 'react-dom'],
             plugins: [
               // https://github.com/vitejs/vite/issues/4398
               externalGlobals({
-                axios: 'axios',
                 react: 'React',
                 'react-dom': 'ReactDOM',
               }),
@@ -47,7 +52,7 @@ export default ({ mode }) => {
           createHtmlPlugin({
             inject: {
               data: {
-                injectScript: genScripts(loadEnv(mode, process.cwd()))
+                injectScript: genScripts({ VITE_GA_TRACKING_ID, VITE_BAIDU_TRACKING_ID })
               }
             }
           })

@@ -1,22 +1,106 @@
-type Records = Pick<
-  CacheItem,
-  'fileName' | 'folderName' | 'shareUrl'
->[]
+import { useState,  useEffect } from 'react'
 
-const CACHE_KEY_NAME = 'oneDriveImageHostingCacheRecords'
-const MAX_CACHE_LENGTH = 100
+import { uuid } from './utils'
+import { uploadHistoryKeyOld, uploadHistoryKey, uploadHistoryLength, settingsHistoryKey } from './config'
 
-export const readCache = () => {
-  return JSON.parse(
-    localStorage.getItem(CACHE_KEY_NAME) || '[]'
-  ) as Records
+/**
+ * migrate old version cache
+ */
+const migrateOldHistory = () => {
+  type OldCache = {
+    fileName: string
+    folderName: string
+    shareUrl: string
+  }
+  const oldCache: OldCache[] = JSON.parse(
+    window.localStorage.getItem(uploadHistoryKeyOld) || '[]'
+  )
+  if (oldCache.length) {
+    window.localStorage.removeItem(uploadHistoryKeyOld)
+    return oldCache.map((old): CacheItem => {
+      const { fileName, folderName, shareUrl } = old
+      return {
+        file: null,
+        uid: uuid(),
+        type: 'image',
+        done: true,
+        name: fileName,
+        folder: folderName,
+        uploadId: '',
+        shareId: '',
+        shareUrl,
+        errorMessage: '',
+        timestamp: 0,
+        isCache: true,
+        selected: false,
+      }
+    })
+  }
+  return []
 }
 
-export const writeCache = (records: Records) => {
-  localStorage.setItem(
-    CACHE_KEY_NAME,
-    JSON.stringify(
-      records.slice(-MAX_CACHE_LENGTH)
-    )
+const getUploadHistory = () => {
+  const history = JSON.parse(
+    window.localStorage.getItem(uploadHistoryKey) || '[]'
+  ) as CacheItem[]
+  return history.concat(
+    migrateOldHistory()
   )
+}
+export const useUploadHistory = () => {
+  return {
+    uploadHistory: getUploadHistory(),
+    setUploadHistory(items: CacheItem[]) {
+      window.localStorage.setItem(
+        uploadHistoryKey,
+        JSON.stringify(
+          items.slice(0, uploadHistoryLength)
+        )
+      )
+    },
+  }
+}
+
+export const useSettings = () => {
+  const [settings, setSettings] = useState({
+    filenameSuffix: false
+  });
+
+  useEffect(() => {
+    const localSettings = window.localStorage.getItem(settingsHistoryKey)
+    if (localSettings) {
+      setSettings(
+        JSON.parse(localSettings) as typeof settings
+      )
+    }
+  }, [])
+
+  return {
+    settings,
+    setSettings(newSettings: typeof settings) {
+      window.localStorage.setItem(
+        settingsHistoryKey,
+        JSON.stringify(newSettings)
+      )
+    }
+  }
+}
+
+const defaultSettings = {
+  filenameSuffix: true
+}
+type Settings = typeof defaultSettings
+export const useSettingsHistory = () => {
+  const localSettings = window.localStorage.getItem(settingsHistoryKey)
+  const settingsHistory = localSettings ? JSON.parse(localSettings) as Settings : defaultSettings
+
+  return {
+    settingsHistory,
+    setSettingsHistory(newSettings: Settings) {
+      window.localStorage.setItem(
+        settingsHistoryKey,
+        JSON.stringify(newSettings)
+      )
+    }
+  }
 }

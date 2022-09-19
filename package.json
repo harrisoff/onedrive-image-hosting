@@ -1,6 +1,6 @@
 {
-  "name": "free-onedrive-image-hosting",
-  "version": "2.0.0",
+  "name": "onedrive-image-hosting",
+  "version": "3.0.0",
   "description": "Free image hosting service based on OneDrive",
   "keywords": [
     "microsoft",
@@ -23,25 +23,28 @@
     "serve": "vite preview --port 8080"
   },
   "dependencies": {
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
-    "@harrisoff/onedrive-js-sdk": "^1.0.3",
-    "@material-ui/core": "^5.0.0-beta.5",
-    "@mui/icons-material": "^5.0.5",
-    "@mui/material": "^5.0.6",
-    "copy-to-clipboard": "^3.3.1",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "@ant-design/icons": "^4.7.0",
+    "@harrisoff/onedrive-js-sdk": "^1.1.0",
+    "@sentry/react": "^7.13.0",
+    "@sentry/tracing": "^7.13.0",
+    "antd": "^4.22.8",
+    "classnames": "^2.3.2",
+    "copy-to-clipboard": "^3.3.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
+    "shortid": "^2.2.16"
   },
   "devDependencies": {
-    "@types/node": "^17.0.38",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@vitejs/plugin-react": "^1.0.0",
-    "less": "^4.1.2",
+    "@types/node": "^18.7.18",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/shortid": "^0.0.29",
+    "@vitejs/plugin-react": "^2.0.1",
+    "less": "^4.1.3",
     "rollup-plugin-external-globals": "^0.6.1",
-    "typescript": "^4.3.2",
-    "vite": "^2.6.4",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.7",
     "vite-plugin-html": "^3.2.0"
   }
 }
