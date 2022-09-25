@@ -1,5 +1,5 @@
 import { useRef, useMemo } from 'react'
-import { Layout, Space, Button } from 'antd'
+import { Button, Layout, Space } from 'antd'
 import { GithubFilled } from '@ant-design/icons'
 import classNames from 'classnames'
 
@@ -7,7 +7,6 @@ import Feedback from '../components/Feedback'
 import type { RefType } from '../components/Feedback'
 
 import { useAuth, useHashParams } from '../utils'
-import tracker from '../tracker'
 
 import classes from './index.module.less'
 
@@ -31,12 +30,11 @@ export default () => {
             style={{ color: 'white' }}
             className={classNames({ [classes.blink]: !hasToken })}
             onClick={() => {
-              tracker.getToken(true)
               openPopup()
             }}
           >
             {
-              hasToken ? 'Refresh token' : 'Get token'
+              hasToken && 'Refresh token'
             }
           </Button>
           <Button

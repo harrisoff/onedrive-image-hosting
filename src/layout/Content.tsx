@@ -8,7 +8,7 @@ import { List, Item } from '../components/FileList'
 
 import { defaultFolder, uploadHistoryLength, showSearchLength, showManageCacheLength } from '../config'
 import { useSettingsHistory, useUploadHistory } from '../cache';
-import { useHashParams } from '../utils';
+import { useHashParams, useAuth } from '../utils';
 import tracker from '../tracker';
 
 import classes from './index.module.less'
@@ -66,16 +66,23 @@ export default () => {
 
   // error messages
   const hashParams = useHashParams()
+  const { openPopup } = useAuth()
   const {
     error,
     errorDescription
   } = useMemo(() => {
+    if (!hashParams.accessToken) {
+      return {
+        error: <>Please <a onClick={openPopup}>get token</a></>,
+        errorDescription: undefined
+      }
+    }
     if (hashParams.error) {
       return hashParams
     }
     return {
-      error: '',
-      errorDescription: ''
+      error: undefined,
+      errorDescription: undefined
     }
   }, [hashParams])
 
