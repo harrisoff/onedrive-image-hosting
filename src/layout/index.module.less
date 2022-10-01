@@ -32,6 +32,14 @@
         &.toolbar {
           display: flex;
           justify-content: space-between;
+          .advanced {
+            display: flex;
+          }
+          .switch {
+            &.active {
+              color: #1890ff
+            }
+          }
         }
         &.fileList {
           flex-grow: 1;
@@ -39,20 +47,5 @@
         }
       }
     }
-  }
-}
-
-.blink {
-  animation: blink-animation 1s steps(5, start) infinite;
-  -webkit-animation: blink-animation 1s steps(5, start) infinite;
-}
-@keyframes blink-animation {
-  to {
-    visibility: hidden;
-  }
-}
-@-webkit-keyframes blink-animation {
-  to {
-    visibility: hidden;
   }
 }

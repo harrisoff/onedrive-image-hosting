@@ -9,5 +9,4 @@ export const uploadHistoryKey = 'OneDriveImageHostingUploadHistory'
 export const uploadHistoryLength = 100
 export const settingsHistoryKey = 'OneDriveImageHostingSettings'
 
-export const showSearchLength = 15
 export const showManageCacheLength = 15

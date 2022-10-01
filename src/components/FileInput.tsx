@@ -15,10 +15,9 @@ const getFileType = (file: RcFile): UploadItem['type'] | null => {
 type Props = {
   onAdd(item: UploadItem): void
   folder: string
-  filenameSuffix: boolean
 }
 export default (props: Props) => {
-  const { onAdd, folder, filenameSuffix } = props
+  const { onAdd, folder } = props
 
   return <Upload.Dragger
     height={120}
@@ -40,7 +39,7 @@ export default (props: Props) => {
           type,
           timestamp: new Date().getTime(),
           done: false,
-          name: filenameSuffix ? `${fileName}.${uuid()}.${fileExt}` : file.name,
+          name: `${fileName}.${uuid()}.${fileExt}`,
           folder,
           uploadId: '',
           shareId: '',
