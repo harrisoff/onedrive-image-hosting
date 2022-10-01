@@ -61,33 +61,8 @@ export const useUploadHistory = () => {
   }
 }
 
-export const useSettings = () => {
-  const [settings, setSettings] = useState({
-    filenameSuffix: false
-  });
-
-  useEffect(() => {
-    const localSettings = window.localStorage.getItem(settingsHistoryKey)
-    if (localSettings) {
-      setSettings(
-        JSON.parse(localSettings) as typeof settings
-      )
-    }
-  }, [])
-
-  return {
-    settings,
-    setSettings(newSettings: typeof settings) {
-      window.localStorage.setItem(
-        settingsHistoryKey,
-        JSON.stringify(newSettings)
-      )
-    }
-  }
-}
-
 const defaultSettings = {
-  filenameSuffix: true
+  showAdvanced: false
 }
 type Settings = typeof defaultSettings
 export const useSettingsHistory = () => {
