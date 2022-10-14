@@ -3,12 +3,7 @@
  * @see https://developers.google.com/tag-platform/gtagjs/reference
  * @example track('music', 'play', 'Hey Jude')
  */
-const track = (
-  category: string,
-  action: string,
-  label?: string,
-  value?: number
-) => {
+const track = (category: string, action: string, label?: string, value?: number) => {
   // baidu
   if (window._hmt) {
     const hmtParams: any[] = ['_trackEvent', category, action]
@@ -18,15 +13,11 @@ const track = (
   }
   // gtag
   if (window.gtag) {
-    window.gtag(
-      'event',
-      category,
-      {
-        action,
-        label,
-        value
-      }
-    )
+    window.gtag('event', category, {
+      action,
+      label,
+      value,
+    })
   }
 }
 
@@ -38,28 +29,18 @@ const track = (
  * - Markdown
  */
 const copyUrl = (urlType: string) => {
-  track(
-    'file',
-    'copy',
-    urlType
-  )
+  track('file', 'copy', urlType)
 }
 
 /**
  * upload file
  */
 const upload = () => {
-  track(
-    'file',
-    'upload',
-  )
+  track('file', 'upload')
 }
 
 const deleteCache = () => {
-  track(
-    'file',
-    'deleteCache',
-  )
+  track('file', 'deleteCache')
 }
 
 /**
@@ -70,18 +51,11 @@ const reProcess = () => {
 }
 
 const feedback = (content: string) => {
-  track(
-    'feedback',
-    'submit',
-    content
-  )
+  track('feedback', 'submit', content)
 }
 
 const getToken = (isRefresh: boolean) => {
-  track(
-    'token',
-    isRefresh ? 'refresh' : 'get'
-  )
+  track('token', isRefresh ? 'refresh' : 'get')
 }
 
 export default {
@@ -90,5 +64,5 @@ export default {
   reProcess,
   feedback,
   deleteCache,
-  getToken
+  getToken,
 }

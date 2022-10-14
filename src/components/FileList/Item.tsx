@@ -1,11 +1,13 @@
-import { useEffect } from "react"
+/* eslint-disable jsx-a11y/media-has-caption */
+
+import { useEffect } from 'react'
 import { Popover, Tooltip, Card, Button, Checkbox } from 'antd'
-import type { CardProps } from "antd"
-import { UploadOutlined, LoadingOutlined } from "@ant-design/icons"
+import type { CardProps } from 'antd'
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 import { getShareUrl } from '@harrisoff/onedrive-js-sdk'
 
-import { useOneDriveClient } from '../../uploader';
+import { useOneDriveClient } from '../../uploader'
 import tracker from '../../tracker'
 import InputWithCopy from './InputWithCopy'
 
@@ -17,35 +19,19 @@ export type Props = {
   onChange(data: Partial<UploadItem>): void
 }
 export default (props: Props) => {
-  const {
-    editMode,
-    data,
-    onChange,
-  } = props
+  const { editMode, data, onChange } = props
 
-  const {
-    done,
-    type,
-    folder,
-    name,
-    uploadId,
-    shareId,
-    shareUrl,
-    errorMessage,
-    file,
-    isCache,
-    selected
-  } = data
+  const { done, type, folder, name, uploadId, shareUrl, errorMessage, isCache, selected } = data
 
-  const oneDriveClient = useOneDriveClient();
+  const oneDriveClient = useOneDriveClient()
 
-  const upload = async (f: File) => {
+  const upload = async (file: File) => {
     if (!isCache) {
       onChange({
         done: false,
       })
       try {
-        const { id } = await oneDriveClient.upload(f, `${folder}/${name}`)
+        const { id } = await oneDriveClient.upload(file, `${folder}/${name}`)
         onChange({
           uploadId: id,
           errorMessage: '',
@@ -87,6 +73,7 @@ export default (props: Props) => {
     if (id) share(id)
   }
 
+  const { file } = data
   useEffect(() => {
     if (file) process(file)
   }, [])
@@ -94,72 +81,88 @@ export default (props: Props) => {
   const cardProps: CardProps = {
     size: 'small',
     className: classNames({ [classes.editMode]: editMode }),
-    title: <Tooltip className={classes.title} title={name}>
-      {name}
-    </Tooltip>,
+    title: (
+      <Tooltip className={classes.title} title={name}>
+        {name}
+      </Tooltip>
+    ),
     extra: editMode && <Checkbox checked={selected} />,
     onClick() {
       if (editMode) {
         onChange({ selected: !selected })
       }
-    }
+    },
   }
 
   if (!done) {
-    return <Card {...cardProps}>
-      <div className={classNames(classes.content, classes.loading)}>
-        <LoadingOutlined />
-      </div>
-    </Card>
+    return (
+      <Card {...cardProps}>
+        <div className={classNames(classes.content, classes.loading)}>
+          <LoadingOutlined />
+        </div>
+      </Card>
+    )
   }
 
   if (!errorMessage) {
-    const CardContent = <div className={classNames(classes.content, classes.succeed)}>
-      {
-        type === 'video'
-          ? <video src={shareUrl} controls />
-          : type === 'audio'
-            ? <audio src={shareUrl} controls />
-            : <img src={shareUrl} alt={name} />
-      }
-    </div>
-    return <Card {...cardProps}>
-      {
-        editMode
-          ? CardContent
-          : <Popover
+    const CardContent = (
+      <div className={classNames(classes.content, classes.succeed)}>
+        {type === 'video' ? (
+          <video src={shareUrl} controls />
+        ) : type === 'audio' ? (
+          <audio src={shareUrl} controls />
+        ) : (
+          <img src={shareUrl} alt={name} />
+        )}
+      </div>
+    )
+    return (
+      <Card {...cardProps}>
+        {editMode ? (
+          CardContent
+        ) : (
+          <Popover
             content={
               <div className={classes.links}>
-                <InputWithCopy label='URL' text={shareUrl} />
-                {
-                  type === 'image' && <>
-                    <InputWithCopy label='HTML' text={`<img src="${shareUrl}" alt="${name}" border="0">`} />
-                    <InputWithCopy label='BBCode' text={`[img]${shareUrl}[/img]`} />
-                    <InputWithCopy label='Markdown' text={`![${name}](${shareUrl})`} />
+                <InputWithCopy label="URL" text={shareUrl} />
+                {type === 'image' && (
+                  <>
+                    <InputWithCopy label="HTML" text={`<img src="${shareUrl}" alt="${name}" border="0">`} />
+                    <InputWithCopy label="BBCode" text={`[img]${shareUrl}[/img]`} />
+                    <InputWithCopy label="Markdown" text={`![${name}](${shareUrl})`} />
                   </>
-                }
+                )}
               </div>
-            }>
+            }
+          >
             {CardContent}
           </Popover>
-      }
-    </Card>
+        )}
+      </Card>
+    )
   }
 
+  const { shareId } = data
   const needReUpload = !uploadId && file
   const needReShare = uploadId && !shareId
-  return <Card {...cardProps}>
-    <div className={classNames(classes.content, classes.error)}>
-      <div>{errorMessage}</div>
-      {
-        (needReShare || needReUpload) ? <>
-          <Button icon={<UploadOutlined />} type="link" onClick={() => {
-            tracker.reProcess()
-            if (needReShare) share(uploadId)
-            else process(file!)
-          }}>try again</Button>
-        </> : null
-      }
-    </div>
-  </Card>
+  return (
+    <Card {...cardProps}>
+      <div className={classNames(classes.content, classes.error)}>
+        <div>{errorMessage}</div>
+        {needReShare || needReUpload ? (
+          <Button
+            icon={<UploadOutlined />}
+            type="link"
+            onClick={() => {
+              tracker.reProcess()
+              if (needReShare) share(uploadId)
+              else process(file!)
+            }}
+          >
+            try again
+          </Button>
+        ) : null}
+      </div>
+    </Card>
+  )
 }

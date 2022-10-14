@@ -1,5 +1,3 @@
-import { useState,  useEffect } from 'react'
-
 import { uuid } from './utils'
 import { uploadHistoryKeyOld, uploadHistoryKey, uploadHistoryLength, settingsHistoryKey } from './config'
 
@@ -12,9 +10,7 @@ const migrateOldHistory = () => {
     folderName: string
     shareUrl: string
   }
-  const oldCache: OldCache[] = JSON.parse(
-    window.localStorage.getItem(uploadHistoryKeyOld) || '[]'
-  )
+  const oldCache: OldCache[] = JSON.parse(window.localStorage.getItem(uploadHistoryKeyOld) || '[]')
   if (oldCache.length) {
     window.localStorage.removeItem(uploadHistoryKeyOld)
     return oldCache.map((old): CacheItem => {
@@ -40,42 +36,28 @@ const migrateOldHistory = () => {
 }
 
 const getUploadHistory = () => {
-  const history = JSON.parse(
-    window.localStorage.getItem(uploadHistoryKey) || '[]'
-  ) as CacheItem[]
-  return history.concat(
-    migrateOldHistory()
-  )
+  const history = JSON.parse(window.localStorage.getItem(uploadHistoryKey) || '[]') as CacheItem[]
+  return history.concat(migrateOldHistory())
 }
-export const useUploadHistory = () => {
-  return {
-    uploadHistory: getUploadHistory(),
-    setUploadHistory(items: CacheItem[]) {
-      window.localStorage.setItem(
-        uploadHistoryKey,
-        JSON.stringify(
-          items.slice(0, uploadHistoryLength)
-        )
-      )
-    },
-  }
-}
+export const useUploadHistory = () => ({
+  uploadHistory: getUploadHistory(),
+  setUploadHistory(items: CacheItem[]) {
+    window.localStorage.setItem(uploadHistoryKey, JSON.stringify(items.slice(0, uploadHistoryLength)))
+  },
+})
 
 const defaultSettings = {
-  showAdvanced: false
+  showAdvanced: false,
 }
 type Settings = typeof defaultSettings
 export const useSettingsHistory = () => {
   const localSettings = window.localStorage.getItem(settingsHistoryKey)
-  const settingsHistory = localSettings ? JSON.parse(localSettings) as Settings : defaultSettings
+  const settingsHistory = localSettings ? (JSON.parse(localSettings) as Settings) : defaultSettings
 
   return {
     settingsHistory,
     setSettingsHistory(newSettings: Settings) {
-      window.localStorage.setItem(
-        settingsHistoryKey,
-        JSON.stringify(newSettings)
-      )
-    }
+      window.localStorage.setItem(settingsHistoryKey, JSON.stringify(newSettings))
+    },
   }
 }

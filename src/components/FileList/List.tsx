@@ -5,7 +5,5 @@ type Props = {
 }
 export default (props: Props) => {
   const { children } = props
-  return <div className={classes.fileList}>
-    {children}
-  </div>
+  return <div className={classes.fileList}>{children}</div>
 }
