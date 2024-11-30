@@ -3,7 +3,6 @@ import { Popover, Tooltip, Card, Button, Checkbox } from 'antd'
 import type { CardProps } from "antd"
 import { UploadOutlined, LoadingOutlined } from "@ant-design/icons"
 import classNames from 'classnames'
-import { getShareUrl } from '@harrisoff/onedrive-js-sdk'
 
 import { useOneDriveClient } from '../../uploader';
 import tracker from '../../tracker'
@@ -67,9 +66,10 @@ export default (props: Props) => {
       })
       try {
         const { shareId } = await oneDriveClient.share(id)
+        const shareUrl = await oneDriveClient.getShareUrl(shareId)
         onChange({
           shareId,
-          shareUrl: getShareUrl(shareId),
+          shareUrl,
           done: true,
           errorMessage: '',
         })

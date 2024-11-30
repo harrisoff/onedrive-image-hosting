@@ -1,6 +1,6 @@
 {
   "name": "onedrive-image-hosting",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Free image hosting service based on OneDrive",
   "keywords": [
     "microsoft",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@harrisoff/onedrive-js-sdk": "^1.1.0",
+    "@harrisoff/onedrive-js-sdk": "^2.0.0",
     "@sentry/react": "^7.13.0",
     "@sentry/tracing": "^7.13.0",
     "antd": "^4.22.8",
